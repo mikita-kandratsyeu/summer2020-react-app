@@ -1,14 +1,14 @@
 # Summer2020
 ## React/Redux
 
-###Setup your IDE accordingly:
+### Setup your IDE accordingly:
 
 1. Use spaces, not TABS;
 2. 2-spaces indent;
 3. Use extension to enable eslint in your IDE;
 4. Use LF end of line;
 
-###Setup Git:
+### Setup Git:
 
 Run: `git config --global core.autocrlf false`
 
