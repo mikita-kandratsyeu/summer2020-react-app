@@ -23,6 +23,9 @@
     "react"
   ],
   "rules": {
-    "no-console": 0
+    "no-console": 0,
+    "import/prefer-default-export": "off",
+    "react/jsx-one-expression-per-line": "off",
+    "react/prop-types": "off"
   }
 }

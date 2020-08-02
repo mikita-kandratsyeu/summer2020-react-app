@@ -1,10 +1,15 @@
 import React from 'react';
+
 import styles from './App.module.scss';
 
-function App() {
+import { Footer, Header, Main } from './components';
+
+function App({ userData }) {
   return (
     <div className={styles.App}>
-      <h1>App</h1>
+      <Header />
+      <Main data={userData} />
+      <Footer />
     </div>
   );
 }
