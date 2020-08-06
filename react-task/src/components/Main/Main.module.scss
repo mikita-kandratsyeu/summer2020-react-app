@@ -1,0 +1,23 @@
+.main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  padding: 25px 0;
+}
+
+.image {
+  display: block;
+  border: 2px solid black;
+
+  width: 200px;
+  height: 200px;
+}
+
+.user {
+  padding: 25px 0;
+
+  text-transform: uppercase;
+}
+
+

@@ -1,0 +1,17 @@
+.footer {
+  display: flex;
+  justify-content: space-around;
+
+  padding: 25px 0;
+}
+
+.link {
+  text-decoration: none;
+  text-transform: uppercase;
+  font-weight: bold;
+  color: black;
+
+  &:hover {
+    color: red;
+  }
+}
