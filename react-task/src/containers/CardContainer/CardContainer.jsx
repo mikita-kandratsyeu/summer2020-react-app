@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 
-import styles from './CardContainer.module.scss';
-
 import { apiCall } from '../../api/mockedApi';
 import { Card } from '../../components/Card';
 import { Loader } from '../../components/UI/Loader';
+
+import styles from './CardContainer.module.scss';
 
 export default class CardContainer extends Component {
   constructor(props) {

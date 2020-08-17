@@ -4,12 +4,10 @@ import CountUp from 'react-countup';
 
 import styles from './Card.module.scss';
 
-function Card({ data }) {
+const Card = ({ data }) => {
   const dates = {
     ...data,
   };
-
-  console.log(dates);
 
   return (
     <div className={styles.card}>
@@ -30,6 +28,6 @@ function Card({ data }) {
       </div>
     </div>
   );
-}
+};
 
 export default Card;
