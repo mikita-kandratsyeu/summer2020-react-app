@@ -2,7 +2,9 @@ import React from 'react';
 
 import styles from './Main.module.scss';
 
-function Main({ data: { user, avatar } }) {
+function Main({ data }) {
+  const { user, avatar } = data;
+
   return (
     <main className={styles.main}>
       <img className={styles.image} src={avatar.image} alt={avatar.alt} />

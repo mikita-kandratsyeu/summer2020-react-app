@@ -5,24 +5,25 @@ import CountUp from 'react-countup';
 import styles from './Card.module.scss';
 
 const Card = ({ data }) => {
-  const dates = {
-    ...data,
-  };
+  const {
+    title, description, price, image, currency,
+  } = data;
 
+  console.log(title, description, price, image, currency);
   return (
     <div className={styles.card}>
-      <img src={dates.image} alt={dates.title} />
+      <img src={image} alt={title} />
       <div className={styles.description}>
-        <h2>{dates.title}</h2>
-        <p>{dates.description}</p>
+        <h2>{title}</h2>
+        <p>{description}</p>
         <h4>от&nbsp;
           <CountUp
             start={0}
-            end={dates.price}
+            end={price}
             duraion={2.75}
             decimals={2}
             decimal=","
-            suffix={` ${dates.currency}`}
+            suffix={` ${currency}`}
           />
         </h4>
       </div>
