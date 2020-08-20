@@ -9,7 +9,6 @@ const Card = ({ data }) => {
     title, description, price, image, currency,
   } = data;
 
-  console.log(title, description, price, image, currency);
   return (
     <div className={styles.card}>
       <img src={image} alt={title} />

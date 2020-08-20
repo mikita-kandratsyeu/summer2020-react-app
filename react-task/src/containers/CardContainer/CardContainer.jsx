@@ -15,7 +15,10 @@ export default class CardContainer extends Component {
   }
 
   componentDidMount() {
-    apiCall().then((value) => this.setState({ cards: [...value] }));
+    apiCall().then(
+      (value) => this.setState({ cards: [...value] }),
+      (error) => console.log(error.message),
+    );
   }
 
   componentWillUnmount() {
