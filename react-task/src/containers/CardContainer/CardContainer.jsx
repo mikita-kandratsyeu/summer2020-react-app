@@ -5,6 +5,7 @@ import { Card } from '../../components/Card';
 import { Loader } from '../../components/UI/Loader';
 
 import styles from './CardContainer.module.scss';
+import { CardCreationForm } from '../CardCreationForm';
 
 export default class CardContainer extends Component {
   constructor(props) {
@@ -30,6 +31,7 @@ export default class CardContainer extends Component {
 
     return (
       <div className={styles.cardContainer}>
+        <CardCreationForm />
         {
           (!cards)
             ? <Loader />

@@ -1,7 +1,8 @@
 import React from 'react';
 
 import CountUp from 'react-countup';
-import { CloseButton } from '../UI/CloseButton';
+
+import { CrossButton } from '../UI/CrossButton';
 
 import styles from './Card.module.scss';
 
@@ -12,7 +13,9 @@ const Card = ({ data }) => {
 
   return (
     <div className={styles.card}>
-      <img src={image} alt={title} />
+      <div className={styles.image}>
+        <img src={image} alt={title} />
+      </div>
       <div className={styles.description}>
         <h2>{title}</h2>
         <p>{description}</p>
@@ -27,7 +30,7 @@ const Card = ({ data }) => {
           />
         </h4>
       </div>
-      <CloseButton />
+      <CrossButton />
     </div>
   );
 };
