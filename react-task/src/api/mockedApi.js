@@ -6,5 +6,5 @@ export const apiCall = () => new Promise((res, rej) => {
       res(mockedResponse);
     }
     rej(new Error('We can\'t process your last request'));
-  }, 3000);
+  }, 500);
 });

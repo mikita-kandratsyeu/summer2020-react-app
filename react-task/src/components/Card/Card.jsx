@@ -1,6 +1,7 @@
 import React from 'react';
 
 import CountUp from 'react-countup';
+import { CloseButton } from '../UI/CloseButton';
 
 import styles from './Card.module.scss';
 
@@ -26,6 +27,7 @@ const Card = ({ data }) => {
           />
         </h4>
       </div>
+      <CloseButton />
     </div>
   );
 };
