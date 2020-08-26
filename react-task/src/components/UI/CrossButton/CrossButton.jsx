@@ -6,13 +6,13 @@ import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import styles from './CrossButton.module.scss';
 
 const CrossButton = (props) => {
-  const { onClick } = props;
+  const { clickHandler } = props;
 
   return (
     <FontAwesomeIcon
       icon={faTimes}
       className={styles.crossButton}
-      onClick={onClick}
+      onClick={clickHandler}
       title="Remove"
     />
   );

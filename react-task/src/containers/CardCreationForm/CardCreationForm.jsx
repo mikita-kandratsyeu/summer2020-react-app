@@ -8,17 +8,29 @@ export default class CardCreationForm extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      id: '',
-      title: '',
-      description: '',
-      price: '',
+      id: uuidv4(),
+      title: 'Смартфон Apple iPhone 11 64GB (черный)',
+      description: 'Apple iOS, экран 6.1" IPS (828x1792), Apple A13 Bionic, '
+        + 'ОЗУ 4 ГБ, флэш-память 64 ГБ, камера 12 Мп, аккумулятор 3046 мАч, 1 SIM',
+      price: '1950.00',
       currency: '',
-      image: '',
+      image: 'https://content2.onliner.by/catalog/device/header/e2189f90f9088975c553ec33431fc186.jpeg',
     };
   }
 
-  handleChange = (e) => {
+  changeHandler = (e) => {
     this.setState({ [e.target.name]: e.target.value });
+  }
+
+  clickHandler = (e) => {
+    e.preventDefault();
+
+    const { updateData } = this.props;
+
+    const id = uuidv4();
+    this.setState({ id });
+
+    updateData(this.state);
   }
 
   render() {
@@ -26,17 +38,17 @@ export default class CardCreationForm extends Component {
       title, description, price, image,
     } = this.state;
 
+    const { isLoad } = this.props;
+
     return (
       <form className={styles.cardCreationForm}>
-        <h2>Add Product</h2>
         <fieldset>
           <input
             name="title"
             placeholder="Title"
             type="text"
-            required
             value={title}
-            onChange={this.handleChange}
+            onChange={this.changeHandler}
           />
         </fieldset>
 
@@ -44,9 +56,8 @@ export default class CardCreationForm extends Component {
           <textarea
             name="description"
             placeholder="Description"
-            required
             value={description}
-            onChange={this.handleChange}
+            onChange={this.changeHandler}
           />
         </fieldset>
 
@@ -55,17 +66,17 @@ export default class CardCreationForm extends Component {
             name="price"
             placeholder="Price"
             type="number"
-            required
             value={price}
-            onChange={this.handleChange}
+            onChange={this.changeHandler}
           />
         </fieldset>
 
         <fieldset>
           <select
             name="currency"
-            onChange={this.handleChange}
+            onChange={this.changeHandler}
           >
+            <option value="">Choose a currency</option>
             <option value="BYN">BYN</option>
             <option value="USD">USD</option>
             <option value="EUR">EUR</option>
@@ -78,15 +89,20 @@ export default class CardCreationForm extends Component {
           <input
             name="image"
             placeholder="Image(URL)"
-            type="text"
-            required
+            type="url"
             value={image}
-            onChange={this.handleChange}
+            onChange={this.changeHandler}
           />
         </fieldset>
 
         <fieldset>
-          <button type="submit">Add card</button>
+          <button
+            type="submit"
+            disabled={!isLoad}
+            onClick={this.clickHandler}
+          >
+            Add card
+          </button>
         </fieldset>
       </form>
     );

@@ -6,10 +6,13 @@ import { CrossButton } from '../UI/CrossButton';
 
 import styles from './Card.module.scss';
 
-const Card = ({ data }) => {
+const Card = (props) => {
   const {
-    title, description, price, image, currency,
-  } = data;
+    data: {
+      title, description, price, image, currency,
+    },
+    clickHandler,
+  } = props;
 
   return (
     <div className={styles.card}>
@@ -22,7 +25,7 @@ const Card = ({ data }) => {
         <h4>от&nbsp;
           <CountUp
             start={0}
-            end={price}
+            end={+price}
             duraion={2.75}
             decimals={2}
             decimal=","
@@ -30,7 +33,7 @@ const Card = ({ data }) => {
           />
         </h4>
       </div>
-      <CrossButton />
+      <CrossButton clickHandler={clickHandler} />
     </div>
   );
 };
