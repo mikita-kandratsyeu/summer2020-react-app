@@ -6,7 +6,6 @@ import styles from './App.module.scss';
 
 const App = () => (
   <div className={styles.App}>
-    <h1>Apple Shop</h1>
     <CardContainer />
   </div>
 );

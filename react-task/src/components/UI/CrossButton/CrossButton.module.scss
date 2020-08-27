@@ -1,0 +1,21 @@
+.crossButton {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+
+  font-size: 22px;
+
+  opacity: 0.3;
+
+  color: #333333;
+
+  transition: .3s all ease-in-out;
+
+  &:hover {
+    cursor: pointer;
+
+    opacity: 1;
+  }
+}
+
+
