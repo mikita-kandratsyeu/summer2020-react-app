@@ -1,7 +1,6 @@
 import React from 'react';
 
 import CountUp from 'react-countup';
-
 import { CrossButton } from '../UI/CrossButton';
 
 import styles from './Card.module.scss';
