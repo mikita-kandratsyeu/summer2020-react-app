@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
+import PropType from 'prop-types';
 
 import { v4 as uuidv4 } from 'uuid';
 
 import styles from './CardCreationForm.module.scss';
 
-export default class CardCreationForm extends Component {
+class CardCreationForm extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -108,3 +109,10 @@ export default class CardCreationForm extends Component {
     );
   }
 }
+
+CardCreationForm.propTypes = {
+  updateData: PropType.func.isRequired,
+  isLoad: PropType.bool.isRequired,
+};
+
+export default CardCreationForm;

@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 import CountUp from 'react-countup';
 import { CrossButton } from '../UI/CrossButton';
@@ -32,9 +33,14 @@ const Card = (props) => {
           />
         </h4>
       </div>
-      <CrossButton clickHandler={clickHandler} />
+      <CrossButton onClick={clickHandler} />
     </div>
   );
+};
+
+Card.propTypes = {
+  data: PropTypes.objectOf(PropTypes.string).isRequired,
+  clickHandler: PropTypes.func.isRequired,
 };
 
 export default Card;

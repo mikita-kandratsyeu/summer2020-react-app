@@ -7,7 +7,7 @@ import { CardCreationForm } from '../CardCreationForm';
 
 import styles from './CardContainer.module.scss';
 
-export default class CardContainer extends Component {
+class CardContainer extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -57,3 +57,5 @@ export default class CardContainer extends Component {
     );
   }
 }
+
+export default CardContainer;
