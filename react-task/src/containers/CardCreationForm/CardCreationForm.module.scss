@@ -52,6 +52,12 @@
     font-family: 'Roboto', sans-serif;
   }
 
+  select {
+    &:hover {
+      cursor: pointer;
+    }
+  }
+
   button {
     cursor: pointer;
     outline: none;
@@ -69,13 +75,10 @@
     text-transform: uppercase;
     font-weight: bold;
 
-    &hover {
-      background: #43a047;
-      transition: background-color .3s ease-in-out;
-    }
+    transition: background-color .2s ease-in-out;
 
-    &:active {
-      transition: background-color .3s ease-in-out;
+    &:hover {
+      background: #43a047;
     }
 
     &:disabled {

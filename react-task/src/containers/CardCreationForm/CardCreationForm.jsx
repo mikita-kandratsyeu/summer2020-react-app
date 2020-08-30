@@ -13,18 +13,18 @@ class CardCreationForm extends Component {
       title: 'Смартфон Apple iPhone 11 64GB (черный)',
       description: 'Apple iOS, экран 6.1" IPS (828x1792), Apple A13 Bionic, '
         + 'ОЗУ 4 ГБ, флэш-память 64 ГБ, камера 12 Мп, аккумулятор 3046 мАч, 1 SIM',
-      price: 1950.00,
-      currency: '',
+      price: 699,
+      currency: 'USD',
       image: 'https://content2.onliner.by/catalog/device/header/e2189f90f9088975c553ec33431fc186.jpeg',
     };
   }
 
   changeHandler = (e) => {
-    if (e.target.name === 'price') {
-      this.setState({ [e.target.name]: +e.target.value });
-    }
+    const target = e.target.name === 'price';
 
-    this.setState({ [e.target.name]: e.target.value });
+    this.setState((!target)
+      ? { [e.target.name]: e.target.value }
+      : { [e.target.name]: +e.target.value });
   }
 
   clickHandler = (e) => {
@@ -43,7 +43,7 @@ class CardCreationForm extends Component {
 
   render() {
     const {
-      title, description, price, image,
+      title, description, price, image, currency,
     } = this.state;
 
     const { isLoad } = this.props;
@@ -82,9 +82,9 @@ class CardCreationForm extends Component {
         <fieldset>
           <select
             name="currency"
+            value={currency}
             onChange={this.changeHandler}
           >
-            <option value="">Choose a currency</option>
             <option value="BYN">BYN</option>
             <option value="USD">USD</option>
             <option value="EUR">EUR</option>
