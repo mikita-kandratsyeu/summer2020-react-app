@@ -39,7 +39,15 @@ const Card = (props) => {
 };
 
 Card.propTypes = {
-  data: PropTypes.objectOf(PropTypes.string).isRequired,
+  data: PropTypes.exact({
+    id: PropTypes.string,
+    title: PropTypes.string,
+    description: PropTypes.string,
+    price: PropTypes.number,
+    currency: PropTypes.string,
+    image: PropTypes.string,
+  }).isRequired,
+
   clickHandler: PropTypes.func.isRequired,
 };
 

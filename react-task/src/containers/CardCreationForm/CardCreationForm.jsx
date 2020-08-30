@@ -13,13 +13,17 @@ class CardCreationForm extends Component {
       title: 'Смартфон Apple iPhone 11 64GB (черный)',
       description: 'Apple iOS, экран 6.1" IPS (828x1792), Apple A13 Bionic, '
         + 'ОЗУ 4 ГБ, флэш-память 64 ГБ, камера 12 Мп, аккумулятор 3046 мАч, 1 SIM',
-      price: '1950.00',
+      price: 1950.00,
       currency: '',
       image: 'https://content2.onliner.by/catalog/device/header/e2189f90f9088975c553ec33431fc186.jpeg',
     };
   }
 
   changeHandler = (e) => {
+    if (e.target.name === 'price') {
+      this.setState({ [e.target.name]: +e.target.value });
+    }
+
     this.setState({ [e.target.name]: e.target.value });
   }
 
@@ -33,6 +37,9 @@ class CardCreationForm extends Component {
 
     updateData(this.state);
   }
+
+  // TODO: Make external position of Inputs
+  // TODO: Add validators for Inputs
 
   render() {
     const {
