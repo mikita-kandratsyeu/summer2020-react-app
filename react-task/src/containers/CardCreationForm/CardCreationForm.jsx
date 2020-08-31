@@ -14,46 +14,75 @@ class CardCreationForm extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      id: uuidv4(),
-      title: 'Смартфон Apple iPhone 11 64GB (черный)',
-      description: 'Apple iOS, экран 6.1" IPS (828x1792), Apple A13 Bionic, '
-        + 'ОЗУ 4 ГБ, флэш-память 64 ГБ, камера 12 Мп, аккумулятор 3046 мАч, 1 SIM',
-      price: 699,
-      currency: 'USD',
-      image: 'https://content2.onliner.by/catalog/device/header/e2189f90f9088975c553ec33431fc186.jpeg',
+      card: {
+        id: uuidv4(),
+        title: 'Смартфон Apple iPhone 11 64GB (черный)',
+        description: 'Apple iOS, экран 6.1" IPS (828x1792), Apple A13 Bionic, '
+          + 'ОЗУ 4 ГБ, флэш-память 64 ГБ, камера 12 Мп, аккумулятор 3046 мАч, 1 SIM',
+        price: 699,
+        currency: 'USD',
+        image: 'https://content2.onliner.by/catalog/device/header/e2189f90f9088975c553ec33431fc186.jpeg',
+      },
+      errors: {
+        title: '',
+        description: '',
+        price: '',
+        image: '',
+      },
     };
   }
 
   changeHandler = (e) => {
-    const target = e.target.name === 'price';
+    const { name } = e.target;
 
-    this.setState((!target)
-      ? { [e.target.name]: e.target.value }
-      : { [e.target.name]: +e.target.value });
+    const isPrice = name === 'price';
+
+    const value = (!isPrice) ? e.target.value : +e.target.value;
+
+    this.setState((state) => ({
+      card: {
+        ...state.card,
+        [name]: value,
+      },
+    }));
   }
 
   clickHandler = () => {
     const { updateData } = this.props;
 
     const id = uuidv4();
-    this.setState({ id });
 
-    updateData(this.state);
+    this.setState({
+      card: { id },
+    });
+
+    const { card } = this.state;
+
+    updateData(card);
 
     this.eraseState();
   }
 
   eraseState() {
-    this.setState({
-      title: '', description: '', price: '', currency: 'BYN', image: '',
-    });
+    this.setState((state) => ({
+      card: {
+        ...state.card,
+        title: '',
+        description: '',
+        price: '',
+        currency: 'BYN',
+        image: '',
+      },
+    }));
   }
 
   // TODO: Add validators for Inputs
 
   render() {
     const {
-      title, description, price, image, currency,
+      card: {
+        title, description, price, image, currency,
+      },
     } = this.state;
 
     const { isLoad } = this.props;
