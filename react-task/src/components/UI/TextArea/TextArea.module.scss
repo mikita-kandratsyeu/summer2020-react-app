@@ -1,0 +1,22 @@
+.textArea {
+  border: 1px solid #ccc;
+
+  width: 100%;
+  height: 100px;
+  max-width: 100%;
+
+  resize: none;
+
+  font-family: 'Roboto', sans-serif;
+
+  background-color: #ffffff;
+
+  margin-bottom: 10px;
+  padding: 10px;
+
+  &:hover {
+    border: 1px solid #aaaaaa;
+
+    transition: border-color .3s ease-in-out;
+  }
+}

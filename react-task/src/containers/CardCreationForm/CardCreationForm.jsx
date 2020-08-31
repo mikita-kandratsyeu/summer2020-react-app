@@ -3,6 +3,11 @@ import PropType from 'prop-types';
 
 import { v4 as uuidv4 } from 'uuid';
 
+import { Input } from '../../components/UI/Input';
+import { TextArea } from '../../components/UI/TextArea';
+import { Button } from '../../components/UI/Button';
+import { Select } from '../../components/UI/Select';
+
 import styles from './CardCreationForm.module.scss';
 
 class CardCreationForm extends Component {
@@ -27,18 +32,23 @@ class CardCreationForm extends Component {
       : { [e.target.name]: +e.target.value });
   }
 
-  clickHandler = (e) => {
-    e.preventDefault();
-
+  clickHandler = () => {
     const { updateData } = this.props;
 
     const id = uuidv4();
     this.setState({ id });
 
     updateData(this.state);
+
+    this.eraseState();
   }
 
-  // TODO: Make external position of Inputs
+  eraseState() {
+    this.setState({
+      title: '', description: '', price: '', currency: 'BYN', image: '',
+    });
+  }
+
   // TODO: Add validators for Inputs
 
   render() {
@@ -51,66 +61,51 @@ class CardCreationForm extends Component {
     return (
       <form className={styles.cardCreationForm}>
         <fieldset>
-          <input
-            name="title"
-            placeholder="Title"
-            type="text"
+          <Input
+            options={{ name: 'title', placeholder: 'Title', type: 'text' }}
             value={title}
             onChange={this.changeHandler}
           />
         </fieldset>
 
         <fieldset>
-          <textarea
-            name="description"
-            placeholder="Description"
+          <TextArea
+            options={{ name: 'description', placeholder: 'Description' }}
             value={description}
             onChange={this.changeHandler}
           />
         </fieldset>
 
         <fieldset>
-          <input
-            name="price"
-            placeholder="Price"
-            type="number"
+          <Input
+            options={{ name: 'price', placeholder: 'Price', type: 'text' }}
             value={price}
             onChange={this.changeHandler}
           />
         </fieldset>
 
         <fieldset>
-          <select
-            name="currency"
+          <Select
+            options={{ name: 'currency', currency: ['BYN', 'USD', 'EUR', 'RUB', 'UAH'] }}
             value={currency}
             onChange={this.changeHandler}
-          >
-            <option value="BYN">BYN</option>
-            <option value="USD">USD</option>
-            <option value="EUR">EUR</option>
-            <option value="RUB">RUB</option>
-            <option value="UAH">UAH</option>
-          </select>
+          />
         </fieldset>
 
         <fieldset>
-          <input
-            name="image"
-            placeholder="Image(URL)"
-            type="url"
+          <Input
+            options={{ name: 'image', placeholder: 'Image(URL)', type: 'url' }}
             value={image}
             onChange={this.changeHandler}
           />
         </fieldset>
 
         <fieldset>
-          <button
-            type="submit"
+          <Button
             disabled={!isLoad}
+            value="Add card"
             onClick={this.clickHandler}
-          >
-            Add card
-          </button>
+          />
         </fieldset>
       </form>
     );
