@@ -24,4 +24,8 @@
     min-width: 100%;
     width: 100%;
   }
+
+  fieldset:last-child {
+    margin: 0;
+  }
 }

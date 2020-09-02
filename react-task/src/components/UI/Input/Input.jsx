@@ -10,7 +10,7 @@ const Input = ({ options, value, onChange }) => {
 
   return (
     <input
-      className={styles.input}
+      className={`${styles.input}`}
       name={name}
       placeholder={placeholder}
       type={type}

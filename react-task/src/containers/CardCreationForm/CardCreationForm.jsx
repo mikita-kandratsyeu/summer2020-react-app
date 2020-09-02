@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropType from 'prop-types';
 
 import { v4 as uuidv4 } from 'uuid';
+import is from 'is_js';
 
 import { Input } from '../../components/UI/Input';
 import { TextArea } from '../../components/UI/TextArea';
@@ -14,120 +15,246 @@ class CardCreationForm extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      card: {
-        id: uuidv4(),
-        title: 'Смартфон Apple iPhone 11 64GB (черный)',
-        description: 'Apple iOS, экран 6.1" IPS (828x1792), Apple A13 Bionic, '
-          + 'ОЗУ 4 ГБ, флэш-память 64 ГБ, камера 12 Мп, аккумулятор 3046 мАч, 1 SIM',
-        price: 699,
-        currency: 'USD',
-        image: 'https://content2.onliner.by/catalog/device/header/e2189f90f9088975c553ec33431fc186.jpeg',
-      },
-      errors: {
-        title: '',
-        description: '',
-        price: '',
-        image: '',
+      id: uuidv4(),
+      isFormValid: false,
+      formControls: {
+        title: {
+          value: '',
+          type: 'text',
+          name: 'title',
+          placeholder: 'Title',
+          errorMessage: 'Введите корректное название',
+          valid: false,
+          touched: false,
+          validation: {
+            required: true,
+            minLength: 6,
+          },
+        },
+        description: {
+          value: '',
+          name: 'description',
+          placeholder: 'Description',
+          errorMessage: 'Введите корректное описание',
+          valid: false,
+          touched: false,
+          validation: {
+            required: true,
+            minLength: 6,
+          },
+        },
+        price: {
+          value: '',
+          type: 'number',
+          name: 'price',
+          placeholder: 'Price',
+          errorMessage: 'Введите корректную цену',
+          valid: false,
+          touched: false,
+          validation: {
+            required: true,
+            minPrice: 0.01,
+          },
+        },
+        currency: {
+          value: 'BYN',
+          name: 'currency',
+          currency: ['BYN', 'USD', 'EUR', 'RUB', 'UAH'],
+        },
+        image: {
+          value: '',
+          type: 'url',
+          name: 'image',
+          placeholder: 'Image(URL)',
+          errorMessage: 'Введите корректный URL',
+          valid: false,
+          touched: false,
+          validation: {
+            required: true,
+            url: true,
+          },
+        },
       },
     };
+
+    this.form = React.createRef();
   }
 
   changeHandler = (e) => {
     const { name } = e.target;
 
-    const isPrice = name === 'price';
+    const { formControls } = this.state;
+    const control = formControls[name];
 
+    const isPrice = name === 'price';
     const value = (!isPrice) ? e.target.value : +e.target.value;
 
-    this.setState((state) => ({
-      card: {
-        ...state.card,
-        [name]: value,
-      },
-    }));
+    control.value = value;
+    control.touched = true;
+    control.valid = this.validateControls(value, control.validation);
+
+    formControls[name] = control;
+
+    let isFormValid = true;
+
+    Object.keys(formControls).forEach((item) => {
+      isFormValid = formControls[item].valid && isFormValid;
+    });
+
+    this.setState({
+      isFormValid,
+      formControls,
+    });
   }
 
   clickHandler = () => {
     const { updateData } = this.props;
 
-    const id = uuidv4();
+    const unique = uuidv4();
+    this.setState({ id: unique });
 
-    this.setState({
-      card: { id },
+    const { id } = this.state;
+    const {
+      formControls: {
+        title, description, price, currency, image,
+      },
+    } = this.state;
+
+    updateData({
+      id,
+      title: title.value,
+      description: description.value,
+      price: price.value,
+      currency: currency.value,
+      image: image.value,
     });
-
-    const { card } = this.state;
-
-    updateData(card);
 
     this.eraseState();
   }
 
-  eraseState() {
+  submitHandler = (e) => {
+    e.preventDefault();
+  }
+
+  validateControls = (value, validation) => {
+    if (!validation) {
+      return true;
+    }
+
+    let isValid = true;
+
+    if (validation.required) {
+      const val = (!is.number(value)) ? value.trim() : value;
+      isValid = val !== '' && isValid;
+    }
+
+    if (validation.minLength) {
+      isValid = value.length >= validation.minLength && isValid;
+    }
+
+    if (validation.minPrice) {
+      isValid = value >= validation.minPrice && isValid;
+    }
+
+    if (validation.url) {
+      isValid = is.url(value) && isValid;
+    }
+
+    return isValid;
+  }
+
+  eraseState = () => {
     this.setState((state) => ({
-      card: {
-        ...state.card,
-        title: '',
-        description: '',
-        price: '',
-        currency: 'BYN',
-        image: '',
+      isFormValid: false,
+      formControls: {
+        title: {
+          ...state.formControls.title,
+          value: '',
+        },
+        description: {
+          ...state.formControls.description,
+          value: '',
+        },
+        price: {
+          ...state.formControls.price,
+          value: '',
+        },
+        currency: {
+          ...state.formControls.currency,
+          value: 'BYN',
+        },
+        image: {
+          ...state.formControls.image,
+          value: '',
+        },
       },
     }));
   }
 
-  // TODO: Add validators for Inputs
-
-  render() {
+  renderControls = (controls) => {
     const {
-      card: {
-        title, description, price, image, currency,
-      },
-    } = this.state;
-
-    const { isLoad } = this.props;
+      title, description, price, currency, image,
+    } = controls;
 
     return (
-      <form className={styles.cardCreationForm}>
+      <>
         <fieldset>
           <Input
-            options={{ name: 'title', placeholder: 'Title', type: 'text' }}
-            value={title}
+            options={{ name: title.name, placeholder: title.placeholder, type: title.type }}
+            value={title.value}
             onChange={this.changeHandler}
           />
         </fieldset>
 
         <fieldset>
           <TextArea
-            options={{ name: 'description', placeholder: 'Description' }}
-            value={description}
+            options={{ name: description.name, placeholder: description.placeholder }}
+            value={description.value}
             onChange={this.changeHandler}
           />
         </fieldset>
 
         <fieldset>
           <Input
-            options={{ name: 'price', placeholder: 'Price', type: 'text' }}
-            value={price}
+            options={{ name: price.name, placeholder: price.placeholder, type: price.type }}
+            value={price.value}
             onChange={this.changeHandler}
           />
         </fieldset>
 
         <fieldset>
           <Select
-            options={{ name: 'currency', currency: ['BYN', 'USD', 'EUR', 'RUB', 'UAH'] }}
-            value={currency}
+            options={{ name: currency.name, currency: currency.currency }}
+            value={currency.value}
             onChange={this.changeHandler}
           />
         </fieldset>
 
         <fieldset>
           <Input
-            options={{ name: 'image', placeholder: 'Image(URL)', type: 'url' }}
-            value={image}
+            options={{ name: image.name, placeholder: image.placeholder, type: image.type }}
+            value={image.value}
             onChange={this.changeHandler}
           />
         </fieldset>
+      </>
+    );
+  };
+
+  // TODO: Add UI for validations. Also should add scrollview for inputs
+
+  render() {
+    const { formControls } = this.state;
+
+    const { isLoad } = this.props;
+
+    return (
+      <form
+        className={styles.cardCreationForm}
+        onSubmit={this.submitHandler}
+        ref={this.form}
+      >
+        {this.renderControls(formControls)}
 
         <fieldset>
           <Button
