@@ -23,7 +23,7 @@ class CardCreationForm extends Component {
           type: 'text',
           name: 'title',
           placeholder: 'Title',
-          errorMessage: 'Введите корректное название',
+          errorMessage: 'Enter the correct title',
           valid: false,
           touched: false,
           validation: {
@@ -35,7 +35,7 @@ class CardCreationForm extends Component {
           value: '',
           name: 'description',
           placeholder: 'Description',
-          errorMessage: 'Введите корректное описание',
+          errorMessage: 'Enter the correct description',
           valid: false,
           touched: false,
           validation: {
@@ -48,7 +48,7 @@ class CardCreationForm extends Component {
           type: 'number',
           name: 'price',
           placeholder: 'Price',
-          errorMessage: 'Введите корректную цену',
+          errorMessage: 'Enter the correct price',
           valid: false,
           touched: false,
           validation: {
@@ -67,7 +67,7 @@ class CardCreationForm extends Component {
           type: 'url',
           name: 'image',
           placeholder: 'Image(URL)',
-          errorMessage: 'Введите корректный URL',
+          errorMessage: 'Enter the correct URL',
           valid: false,
           touched: false,
           validation: {

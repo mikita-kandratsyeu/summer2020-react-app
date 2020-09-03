@@ -1,6 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faExclamationTriangle as warning } from '@fortawesome/free-solid-svg-icons';
+
 import styles from './Input.module.scss';
 
 const isInvalidInput = (valid, touched) => !valid && touched;
@@ -31,7 +34,11 @@ const Input = ({
       />
       {
         (isInvalid)
-          ? <span className={styles.message}>{message}</span>
+          ? (
+            <span className={styles.message}>
+              <FontAwesomeIcon className={styles.icon} icon={warning} /> {message}
+            </span>
+          )
           : null
       }
     </>
