@@ -25,7 +25,7 @@ const Card = (props) => {
         <h4>от&nbsp;
           <CountUp
             start={0}
-            end={+price}
+            end={price}
             duraion={2.75}
             decimals={2}
             decimal=","
