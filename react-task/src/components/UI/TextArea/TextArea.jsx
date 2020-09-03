@@ -3,19 +3,36 @@ import PropTypes from 'prop-types';
 
 import styles from './TextArea.module.scss';
 
-const TextArea = ({ options, value, onChange }) => {
+const isInvalidTextArea = (valid, touched) => !valid && touched;
+
+const TextArea = ({
+  options, value, onChange, validation,
+}) => {
   const {
     name, placeholder,
   } = options;
 
+  const {
+    valid, touched, message,
+  } = validation;
+
+  const isInvalid = isInvalidTextArea(valid, touched);
+
   return (
-    <textarea
-      className={styles.textArea}
-      name={name}
-      placeholder={placeholder}
-      value={value}
-      onChange={onChange}
-    />
+    <>
+      <textarea
+        className={`${styles.textArea} ${(isInvalid) ? styles.invalid : null}`}
+        name={name}
+        placeholder={placeholder}
+        value={value}
+        onChange={onChange}
+      />
+      {
+        (isInvalid)
+          ? <span className={styles.message}>{message}</span>
+          : null
+      }
+    </>
   );
 };
 
@@ -23,6 +40,12 @@ TextArea.propTypes = {
   options: PropTypes.exact({
     name: PropTypes.string,
     placeholder: PropTypes.string,
+  }).isRequired,
+
+  validation: PropTypes.exact({
+    valid: PropTypes.bool,
+    touched: PropTypes.bool,
+    message: PropTypes.string,
   }).isRequired,
 
   value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,

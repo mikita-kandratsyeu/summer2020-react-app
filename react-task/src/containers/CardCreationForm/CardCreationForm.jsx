@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropType from 'prop-types';
 
-import { v4 as uuidv4 } from 'uuid';
+import { v4 as uniqueId } from 'uuid';
 import is from 'is_js';
 
 import { Input } from '../../components/UI/Input';
@@ -15,7 +15,7 @@ class CardCreationForm extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      id: uuidv4(),
+      id: uniqueId(),
       isFormValid: false,
       formControls: {
         title: {
@@ -60,6 +60,7 @@ class CardCreationForm extends Component {
           value: 'BYN',
           name: 'currency',
           currency: ['BYN', 'USD', 'EUR', 'RUB', 'UAH'],
+          valid: true,
         },
         image: {
           value: '',
@@ -110,7 +111,7 @@ class CardCreationForm extends Component {
   clickHandler = () => {
     const { updateData } = this.props;
 
-    const uuid = uuidv4();
+    const uuid = uniqueId();
     this.setState({ id: uuid });
 
     const {
@@ -201,6 +202,7 @@ class CardCreationForm extends Component {
         <fieldset>
           <Input
             options={{ name: title.name, placeholder: title.placeholder, type: title.type }}
+            validation={{ valid: title.valid, touched: title.touched, message: title.errorMessage }}
             value={title.value}
             onChange={this.changeHandler}
           />
@@ -209,6 +211,11 @@ class CardCreationForm extends Component {
         <fieldset>
           <TextArea
             options={{ name: description.name, placeholder: description.placeholder }}
+            validation={{
+              valid: description.valid,
+              touched: description.touched,
+              message: description.errorMessage,
+            }}
             value={description.value}
             onChange={this.changeHandler}
           />
@@ -217,6 +224,7 @@ class CardCreationForm extends Component {
         <fieldset>
           <Input
             options={{ name: price.name, placeholder: price.placeholder, type: price.type }}
+            validation={{ valid: price.valid, touched: price.touched, message: price.errorMessage }}
             value={price.value}
             onChange={this.changeHandler}
           />
@@ -233,6 +241,7 @@ class CardCreationForm extends Component {
         <fieldset>
           <Input
             options={{ name: image.name, placeholder: image.placeholder, type: image.type }}
+            validation={{ valid: image.valid, touched: image.touched, message: image.errorMessage }}
             value={image.value}
             onChange={this.changeHandler}
           />

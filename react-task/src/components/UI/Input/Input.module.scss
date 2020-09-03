@@ -1,6 +1,8 @@
+$material-red: #f44336;
+
 .input {
   display: block;
-  border: 1px solid #ccc;
+  border: 1px solid #cccccc;
   outline: none;
 
   width: 100%;
@@ -11,6 +13,14 @@
   padding: 10px;
 }
 
+.message {
+  color: $material-red;
+
+  padding-left: 2px;
+
+  font-size: 12px;
+}
+
 .invalid {
-  border: 1px solid #f44336;
+  border: 1px solid $material-red;
 }
