@@ -12,19 +12,18 @@ class CardContainer extends Component {
     super(props);
     this.state = {
       cards: null,
-      isLoad: false,
     };
   }
 
   componentDidMount() {
     apiCall().then(
-      (value) => this.setState({ cards: [...value], isLoad: true }),
+      (value) => this.setState({ cards: [...value] }),
       (error) => console.log(error.message),
     );
   }
 
   componentWillUnmount() {
-    this.setState({ cards: null, isLoad: false });
+    this.setState({ cards: null });
   }
 
   updateData = (value) => {
@@ -42,10 +41,10 @@ class CardContainer extends Component {
   }
 
   render() {
-    const { cards, isLoad } = this.state;
+    const { cards } = this.state;
     return (
       <div className={styles.cardContainer}>
-        <CardCreationForm updateData={this.updateData} isLoad={isLoad} />
+        <CardCreationForm updateData={this.updateData} />
         {
           (!cards)
             ? <Loader />

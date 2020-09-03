@@ -110,11 +110,11 @@ class CardCreationForm extends Component {
   clickHandler = () => {
     const { updateData } = this.props;
 
-    const unique = uuidv4();
-    this.setState({ id: unique });
+    const uuid = uuidv4();
+    this.setState({ id: uuid });
 
-    const { id } = this.state;
     const {
+      id,
       formControls: {
         title, description, price, currency, image,
       },
@@ -244,9 +244,7 @@ class CardCreationForm extends Component {
   // TODO: Add UI for validations. Also should add scrollview for inputs
 
   render() {
-    const { formControls } = this.state;
-
-    const { isLoad } = this.props;
+    const { isFormValid, formControls } = this.state;
 
     return (
       <form
@@ -258,7 +256,7 @@ class CardCreationForm extends Component {
 
         <fieldset>
           <Button
-            disabled={!isLoad}
+            disabled={!isFormValid}
             value="Add card"
             onClick={this.clickHandler}
           />
@@ -270,7 +268,6 @@ class CardCreationForm extends Component {
 
 CardCreationForm.propTypes = {
   updateData: PropType.func.isRequired,
-  isLoad: PropType.bool.isRequired,
 };
 
 export default CardCreationForm;
