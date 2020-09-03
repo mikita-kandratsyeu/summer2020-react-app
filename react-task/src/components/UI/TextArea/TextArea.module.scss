@@ -1,0 +1,39 @@
+$material-red: #f44336;
+
+.textArea {
+  border: 1px solid #cccccc;
+  outline: none;
+  box-sizing: border-box;
+
+  width: 100%;
+  height: 100px;
+  max-width: 100%;
+
+  resize: none;
+
+  font-family: 'Roboto', sans-serif;
+
+  background-color: #ffffff;
+
+  margin-bottom: 5px;
+  padding: 10px;
+}
+
+.message {
+  color: $material-red;
+
+  padding-left: 2px;
+
+  font-size: 12px;
+}
+
+.icon {
+  margin-right: 2px;
+
+  font-size: 10px;
+}
+
+.invalid {
+  border: 1px solid $material-red;
+}
+

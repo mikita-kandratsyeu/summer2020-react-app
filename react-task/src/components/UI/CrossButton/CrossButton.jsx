@@ -1,21 +1,22 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
 
 import styles from './CrossButton.module.scss';
 
-const CrossButton = (props) => {
-  const { clickHandler } = props;
+const CrossButton = ({ onClick }) => (
+  <FontAwesomeIcon
+    icon={faTimes}
+    className={styles.crossButton}
+    onClick={onClick}
+    title="Remove"
+  />
+);
 
-  return (
-    <FontAwesomeIcon
-      icon={faTimes}
-      className={styles.crossButton}
-      onClick={clickHandler}
-      title="Remove"
-    />
-  );
+CrossButton.propTypes = {
+  onClick: PropTypes.func.isRequired,
 };
 
 export default CrossButton;

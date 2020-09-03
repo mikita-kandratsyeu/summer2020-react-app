@@ -1,0 +1,32 @@
+$material-red: #f44336;
+
+.input {
+  display: block;
+  border: 1px solid #cccccc;
+  outline: none;
+
+  width: 100%;
+
+  background-color: #ffffff;
+
+  margin-bottom: 10px;
+  padding: 10px;
+}
+
+.message {
+  color: $material-red;
+
+  padding-left: 2px;
+
+  font-size: 12px;
+}
+
+.icon {
+  margin-right: 2px;
+
+  font-size: 10px;
+}
+
+.invalid {
+  border: 1px solid $material-red;
+}
