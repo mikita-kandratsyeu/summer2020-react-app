@@ -1,5 +1,6 @@
 .select {
   border: 1px solid #ccc;
+  outline: none;
 
   width: 100%;
 
@@ -10,8 +11,5 @@
 
   &:hover {
     cursor: pointer;
-    border: 1px solid #aaaaaa;
-
-    transition: border-color .3s ease-in-out;
   }
 }

@@ -250,7 +250,7 @@ class CardCreationForm extends Component {
     );
   };
 
-  // TODO: Add UI for validations. Also should add scrollview for inputs
+  // TODO: Add scrollview for inputs
 
   render() {
     const { isFormValid, formControls } = this.state;
