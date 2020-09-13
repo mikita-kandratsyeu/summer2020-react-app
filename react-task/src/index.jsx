@@ -1,20 +1,16 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
+import { BrowserRouter as Router } from 'react-router-dom';
+
 import { App } from './containers/App';
 
 import './index.scss';
 
-const store = {
-  user: {
-    firstName: 'Tony',
-    lastName: 'Stark',
-  },
+const app = (
+  <Router>
+    <App />
+  </Router>
+);
 
-  avatar: {
-    image: 'https://i.ebayimg.com/images/g/C24AAOSw-xhdPnvQ/s-l1600.jpg',
-    alt: 'fallback title',
-  },
-};
-
-ReactDOM.render(<App userData={store} />, document.querySelector('#root'));
+ReactDOM.render(app, document.querySelector('#root'));

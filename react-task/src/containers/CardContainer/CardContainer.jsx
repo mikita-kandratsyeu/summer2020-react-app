@@ -8,6 +8,8 @@ import { CardCreationForm } from '../CardCreationForm';
 import styles from './CardContainer.module.scss';
 
 class CardContainer extends Component {
+  _isMounted = false;
+
   constructor(props) {
     super(props);
     this.state = {
@@ -16,14 +18,19 @@ class CardContainer extends Component {
   }
 
   componentDidMount() {
-    apiCall().then(
-      (value) => this.setState({ cards: [...value] }),
-      (error) => console.log(error.message),
-    );
+    this._isMounted = true;
+
+    apiCall()
+      .then((response) => {
+        if (this._isMounted) {
+          this.setState({ cards: [...response] });
+        }
+      })
+      .catch((error) => console.log(error.message));
   }
 
   componentWillUnmount() {
-    this.setState({ cards: null });
+    this._isMounted = false;
   }
 
   updateData = (value) => {

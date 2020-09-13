@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropType from 'prop-types';
 
-import { v4 as uniqueId } from 'uuid';
+import { v4 as unique } from 'uuid';
 import is from 'is_js';
 
 import { Input } from '../../components/UI/Input';
@@ -15,7 +15,7 @@ class CardCreationForm extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      id: uniqueId(),
+      id: unique(),
       isFormValid: false,
       formControls: {
         title: {
@@ -77,8 +77,6 @@ class CardCreationForm extends Component {
         },
       },
     };
-
-    this.form = React.createRef();
   }
 
   changeHandler = (e) => {
@@ -111,7 +109,7 @@ class CardCreationForm extends Component {
   clickHandler = () => {
     const { updateData } = this.props;
 
-    const uuid = uniqueId();
+    const uuid = unique();
     this.setState({ id: uuid });
 
     const {
@@ -250,7 +248,6 @@ class CardCreationForm extends Component {
     );
   };
 
-
   render() {
     const { isFormValid, formControls } = this.state;
 
@@ -258,7 +255,6 @@ class CardCreationForm extends Component {
       <form
         className={styles.cardCreationForm}
         onSubmit={this.submitHandler}
-        ref={this.form}
       >
         {this.renderControls(formControls)}
 
