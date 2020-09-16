@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
 import { apiCall } from '../../api/mockedApi';
 import { Card } from '../../components/Card';
@@ -25,7 +26,6 @@ class CardContainer extends Component {
     if (!cards) {
       apiCall()
         .then((response) => {
-          console.log(response);
           if (this._isMounted) {
             this.setState({ cards: [...response] });
           }
@@ -50,6 +50,19 @@ class CardContainer extends Component {
     localStorage.setItem('cards', JSON.stringify(data.cards));
   }
 
+  renderCards = (cards, access) => (
+    (!cards)
+      ? <Loader />
+      : cards.map((items) => (
+        <Card
+          key={items.id}
+          data={items}
+          access={access}
+          clickHandler={() => this.removeData(items.id)}
+        />
+      ))
+  );
+
   removeData = (idx) => {
     const { cards } = this.state;
 
@@ -62,19 +75,23 @@ class CardContainer extends Component {
 
   render() {
     const { cards } = this.state;
+    const { access } = this.props;
+
     return (
       <div className={styles.cardContainer}>
-        <CardCreationForm updateData={this.updateData} />
         {
-          (!cards)
-            ? <Loader />
-            : cards.map((items) => (
-              <Card key={items.id} data={items} clickHandler={() => this.removeData(items.id)} />
-            ))
+          (access === 'Admin')
+            ? <CardCreationForm updateData={this.updateData} />
+            : null
         }
+        {this.renderCards(cards, access)}
       </div>
     );
   }
 }
+
+CardContainer.propTypes = {
+  access: PropTypes.string.isRequired,
+};
 
 export default CardContainer;

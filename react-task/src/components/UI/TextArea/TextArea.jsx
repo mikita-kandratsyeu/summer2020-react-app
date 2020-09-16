@@ -48,13 +48,11 @@ TextArea.propTypes = {
     name: PropTypes.string,
     placeholder: PropTypes.string,
   }).isRequired,
-
   validation: PropTypes.exact({
     valid: PropTypes.bool,
     touched: PropTypes.bool,
     message: PropTypes.string,
   }).isRequired,
-
   value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
   onChange: PropTypes.func.isRequired,
 };

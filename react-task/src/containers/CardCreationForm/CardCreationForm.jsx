@@ -230,7 +230,7 @@ class CardCreationForm extends Component {
 
         <fieldset>
           <Select
-            options={{ name: currency.name, currency: currency.currency }}
+            options={{ name: currency.name, array: currency.currency }}
             value={currency.value}
             onChange={this.changeHandler}
           />

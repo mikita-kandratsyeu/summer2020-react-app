@@ -16,6 +16,7 @@ class App extends Component {
     this.state = {
       username: '',
       isAuth: false,
+      access: 'User',
     };
   }
 
@@ -23,16 +24,16 @@ class App extends Component {
     const user = JSON.parse(localStorage.getItem('user'));
 
     if (user && user.token) {
-      this.setState({ username: user.username, isAuth: user.token });
+      this.setState({ username: user.username, isAuth: user.token, access: user.access });
     }
   }
 
-  updateAuth = (isAuth, username = '') => {
-    this.setState({ isAuth, username });
+  updateAuth = (isAuth, username = '', access = false) => {
+    this.setState({ isAuth, username, access });
   }
 
   render() {
-    const { isAuth, username } = this.state;
+    const { isAuth, username, access } = this.state;
 
     let routes = (
       <Switch>
@@ -49,9 +50,11 @@ class App extends Component {
     if (isAuth) {
       routes = (
         <Switch>
-          <Route path="/cards" component={CardContainer} />
+          <Route path="/cards">
+            <CardContainer access={access} />
+          </Route>
           <Route path="/profile">
-            <Profile data={{ username, update: this.updateAuth }} />
+            <Profile data={{ username, update: this.updateAuth, access }} />
           </Route>
           <Redirect from="/login" to="/" />
           <Redirect exact from="/" to="/cards" />

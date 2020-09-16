@@ -7,6 +7,7 @@ import { Input } from '../../components/UI/Input';
 import { Button } from '../../components/UI/Button';
 
 import styles from './Auth.module.scss';
+import { Select } from '../../components/UI/Select';
 
 class Auth extends Component {
   constructor(props) {
@@ -40,6 +41,12 @@ class Auth extends Component {
             minLength: 6,
           },
         },
+        access: {
+          value: 'User',
+          name: 'access',
+          access: ['User', 'Admin'],
+          valid: true,
+        },
       },
     };
   }
@@ -72,7 +79,7 @@ class Auth extends Component {
   }
 
   clickHandler = () => {
-    const { isFormValid, formControls: { username } } = this.state;
+    const { isFormValid, formControls: { username, access } } = this.state;
 
     const { history } = this.props;
 
@@ -80,8 +87,13 @@ class Auth extends Component {
 
     const { from } = { from: { pathname: '/' } };
 
-    localStorage.setItem('user', JSON.stringify({ token: isFormValid, username: username.value }));
-    updateAuth(isFormValid, username.value);
+    localStorage.setItem('user', JSON.stringify({
+      token: isFormValid,
+      username: username.value,
+      access: access.value,
+    }));
+
+    updateAuth(isFormValid, username.value, access.value);
 
     history.replace(from);
 
@@ -128,7 +140,7 @@ class Auth extends Component {
 
   renderControls = (controls) => {
     const {
-      username, password,
+      username, password, access,
     } = controls;
 
     return (
@@ -163,6 +175,14 @@ class Auth extends Component {
               message: password.errorMessage,
             }}
             value={password.value}
+            onChange={this.changeHandler}
+          />
+        </fieldset>
+
+        <fieldset>
+          <Select
+            options={{ name: access.name, array: access.access }}
+            value={access.value}
             onChange={this.changeHandler}
           />
         </fieldset>
