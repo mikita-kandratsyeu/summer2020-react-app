@@ -72,17 +72,18 @@ class Auth extends Component {
   }
 
   clickHandler = () => {
-    const { updateData } = this.props;
-
     const { isFormValid, formControls: { username } } = this.state;
 
     const { history } = this.props;
 
+    const { updateAuth } = this.props;
+
     const { from } = { from: { pathname: '/' } };
 
-    history.replace(from);
+    localStorage.setItem('user', JSON.stringify({ token: isFormValid, username: username.value }));
+    updateAuth(isFormValid, username.value);
 
-    updateData(username.value, isFormValid);
+    history.replace(from);
 
     this.eraseState();
   }
@@ -192,7 +193,7 @@ class Auth extends Component {
 }
 
 Auth.propTypes = {
-  updateData: PropType.func.isRequired,
+  updateAuth: PropType.func.isRequired,
   history: PropType.shape({
     replace: PropType.func.isRequired,
   }).isRequired,

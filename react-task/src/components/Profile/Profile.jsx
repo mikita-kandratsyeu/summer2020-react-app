@@ -1,16 +1,35 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import styles from './Profile.module.scss';
+import { useHistory } from 'react-router-dom';
 
-const Profile = ({ username }) => (
-  <div className={styles.profile}>
-    <h1>Welcome {username}!</h1>
-    <p>On this website you can add different Apple electronics</p>
-  </div>
-);
+import styles from './Profile.module.scss';
+import { Button } from '../UI/Button';
+
+const Profile = ({ data: { username, update } }) => {
+  const history = useHistory();
+
+  const clickHandler = () => {
+    update(false);
+
+    localStorage.clear();
+
+    history.push('/');
+  };
+
+  return (
+    <div className={styles.profile}>
+      <h1>Welcome {username}!</h1>
+      <p>On this website you can add different Apple electronics</p>
+      <Button value="Logout" onClick={clickHandler} disabled={false} />
+    </div>
+  );
+};
 
 Profile.propTypes = {
-  username: PropTypes.string.isRequired,
+  data: PropTypes.exact({
+    username: PropTypes.string,
+    update: PropTypes.func,
+  }).isRequired,
 };
 export default Profile;

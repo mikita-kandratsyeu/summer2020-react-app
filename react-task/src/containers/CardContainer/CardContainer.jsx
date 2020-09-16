@@ -20,13 +20,20 @@ class CardContainer extends Component {
   componentDidMount() {
     this._isMounted = true;
 
-    apiCall()
-      .then((response) => {
-        if (this._isMounted) {
-          this.setState({ cards: [...response] });
-        }
-      })
-      .catch((error) => console.log(error.message));
+    const cards = JSON.parse(localStorage.getItem('cards'));
+
+    if (!cards) {
+      apiCall()
+        .then((response) => {
+          console.log(response);
+          if (this._isMounted) {
+            this.setState({ cards: [...response] });
+          }
+        })
+        .catch((error) => console.log(error.message));
+    } else if (this._isMounted) {
+      this.setState({ cards: [...cards] });
+    }
   }
 
   componentWillUnmount() {
@@ -36,7 +43,11 @@ class CardContainer extends Component {
   updateData = (value) => {
     const { cards } = this.state;
 
-    this.setState({ cards: [...cards, value] });
+    const data = { cards: [...cards, value] };
+
+    this.setState(data);
+
+    localStorage.setItem('cards', JSON.stringify(data.cards));
   }
 
   removeData = (idx) => {
@@ -45,6 +56,8 @@ class CardContainer extends Component {
     const updateState = cards.filter((item) => item.id !== idx);
 
     this.setState({ cards: updateState });
+
+    localStorage.setItem('cards', JSON.stringify(updateState));
   }
 
   render() {
