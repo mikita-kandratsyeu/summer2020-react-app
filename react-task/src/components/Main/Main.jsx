@@ -3,14 +3,11 @@ import PropTypes from 'prop-types';
 
 import styles from './Main.module.scss';
 
-function Main(props) {
+function Main({ data }) {
   const {
-    data:
-      {
-        user: { firstName, lastName },
-        avatar: { image, alt },
-      },
-  } = props;
+    user: { firstName, lastName },
+    avatar: { image, alt },
+  } = data;
 
   return (
     <main className={styles.main}>

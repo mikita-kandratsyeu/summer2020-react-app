@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
 import { apiCall } from '../../api/mockedApi';
 import { Card } from '../../components/Card';
@@ -8,6 +9,8 @@ import { CardCreationForm } from '../CardCreationForm';
 import styles from './CardContainer.module.scss';
 
 class CardContainer extends Component {
+  _isMounted = false;
+
   constructor(props) {
     super(props);
     this.state = {
@@ -16,21 +19,49 @@ class CardContainer extends Component {
   }
 
   componentDidMount() {
-    apiCall().then(
-      (value) => this.setState({ cards: [...value] }),
-      (error) => console.log(error.message),
-    );
+    this._isMounted = true;
+
+    const cards = JSON.parse(localStorage.getItem('cards'));
+
+    if (!cards) {
+      apiCall()
+        .then((response) => {
+          if (this._isMounted) {
+            this.setState({ cards: [...response] });
+          }
+        })
+        .catch((error) => console.log(error.message));
+    } else if (this._isMounted) {
+      this.setState({ cards: [...cards] });
+    }
   }
 
   componentWillUnmount() {
-    this.setState({ cards: null });
+    this._isMounted = false;
   }
 
   updateData = (value) => {
     const { cards } = this.state;
 
-    this.setState({ cards: [...cards, value] });
+    const data = { cards: [...cards, value] };
+
+    this.setState(data);
+
+    localStorage.setItem('cards', JSON.stringify(data.cards));
   }
+
+  renderCards = (cards, access) => (
+    (!cards)
+      ? <Loader />
+      : cards.map((items) => (
+        <Card
+          key={items.id}
+          data={items}
+          access={access}
+          clickHandler={() => this.removeData(items.id)}
+        />
+      ))
+  );
 
   removeData = (idx) => {
     const { cards } = this.state;
@@ -38,23 +69,29 @@ class CardContainer extends Component {
     const updateState = cards.filter((item) => item.id !== idx);
 
     this.setState({ cards: updateState });
+
+    localStorage.setItem('cards', JSON.stringify(updateState));
   }
 
   render() {
     const { cards } = this.state;
+    const { access } = this.props;
+
     return (
       <div className={styles.cardContainer}>
-        <CardCreationForm updateData={this.updateData} />
         {
-          (!cards)
-            ? <Loader />
-            : cards.map((items) => (
-              <Card key={items.id} data={items} clickHandler={() => this.removeData(items.id)} />
-            ))
+          (access === 'Admin')
+            ? <CardCreationForm updateData={this.updateData} />
+            : null
         }
+        {this.renderCards(cards, access)}
       </div>
     );
   }
 }
+
+CardContainer.propTypes = {
+  access: PropTypes.string.isRequired,
+};
 
 export default CardContainer;

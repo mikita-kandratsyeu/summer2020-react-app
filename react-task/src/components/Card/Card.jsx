@@ -11,6 +11,7 @@ const Card = (props) => {
     data: {
       title, description, price, image, currency,
     },
+    access,
     clickHandler,
   } = props;
 
@@ -33,7 +34,11 @@ const Card = (props) => {
           />
         </h4>
       </div>
-      <CrossButton onClick={clickHandler} />
+      {
+        (access === 'Admin')
+          ? <CrossButton onClick={clickHandler} />
+          : null
+      }
     </div>
   );
 };
@@ -47,7 +52,7 @@ Card.propTypes = {
     currency: PropTypes.string,
     image: PropTypes.string,
   }).isRequired,
-
+  access: PropTypes.string.isRequired,
   clickHandler: PropTypes.func.isRequired,
 };
 
