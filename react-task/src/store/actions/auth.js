@@ -1,46 +1,40 @@
 import { AUTH_SUCCESS, AUTH_LOGOUT } from './actionTypes';
 
-export function authSuccess({ token, username, access }) {
-  return {
-    type: AUTH_SUCCESS,
-    payload: {
-      token,
-      username,
-      access,
-    },
-  };
-}
+export const authSuccess = ({ token, username, access }) => ({
+  type: AUTH_SUCCESS,
+  payload: {
+    token,
+    username,
+    access,
+  },
+});
 
-export function logout() {
+export const logout = () => {
   localStorage.clear();
 
   return {
     type: AUTH_LOGOUT,
   };
-}
+};
 
-export function autoLogin() {
-  return (dispatch) => {
-    const user = localStorage.getItem('user');
+export const autoLogin = () => (dispatch) => {
+  const user = localStorage.getItem('user');
 
-    if (!user) {
-      dispatch(logout());
-    } else {
-      dispatch(authSuccess(JSON.parse(user)));
-    }
+  if (!user) {
+    dispatch(logout());
+  } else {
+    dispatch(authSuccess(JSON.parse(user)));
+  }
+};
+
+export const auth = (username, access) => (dispatch) => {
+  const authData = {
+    token: true,
+    username,
+    access,
   };
-}
 
-export function auth(username, access) {
-  return (dispatch) => {
-    const authData = {
-      token: true,
-      username,
-      access,
-    };
+  localStorage.setItem('user', JSON.stringify(authData));
 
-    localStorage.setItem('user', JSON.stringify(authData));
-
-    dispatch(authSuccess(authData));
-  };
-}
+  dispatch(authSuccess(authData));
+};

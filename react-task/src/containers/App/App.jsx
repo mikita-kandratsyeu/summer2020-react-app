@@ -1,6 +1,10 @@
 import React, { Component } from 'react';
+import PropType from 'prop-types';
 
 import { Route, Switch, Redirect } from 'react-router-dom';
+
+import { connect } from 'react-redux';
+import { autoLogin } from '../../store/actions';
 
 import { Navigation } from '../../components/Navigation';
 import { Auth } from '../Auth';
@@ -11,34 +15,19 @@ import { Error404 } from '../../components/Error404';
 import styles from './App.module.scss';
 
 class App extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      username: '',
-      isAuth: false,
-      access: 'User',
-    };
-  }
-
   componentDidMount() {
-    const user = JSON.parse(localStorage.getItem('user'));
+    const { checkAuth } = this.props;
 
-    if (user && user.token) {
-      this.setState({ username: user.username, isAuth: user.token, access: user.access });
-    }
-  }
-
-  updateAuth = (isAuth, username = '', access = false) => {
-    this.setState({ isAuth, username, access });
+    checkAuth();
   }
 
   render() {
-    const { isAuth, username, access } = this.state;
+    const { isAuth } = this.props;
 
     let routes = (
       <Switch>
         <Route path="/login">
-          <Auth updateAuth={this.updateAuth} />
+          <Auth />
         </Route>
         <Redirect from="/cards" to="/" />
         <Redirect from="/profile" to="/" />
@@ -50,12 +39,8 @@ class App extends Component {
     if (isAuth) {
       routes = (
         <Switch>
-          <Route path="/cards">
-            <CardContainer access={access} />
-          </Route>
-          <Route path="/profile">
-            <Profile data={{ username, update: this.updateAuth, access }} />
-          </Route>
+          <Route path="/cards" component={CardContainer} />
+          <Route path="/profile" component={Profile} />
           <Redirect from="/login" to="/" />
           <Redirect exact from="/" to="/cards" />
           <Route path="*" component={Error404} />
@@ -72,4 +57,17 @@ class App extends Component {
   }
 }
 
-export default App;
+App.propTypes = {
+  checkAuth: PropType.func.isRequired,
+  isAuth: PropType.bool.isRequired,
+};
+
+const mapStateToProps = (state) => ({
+  isAuth: !!state.auth.token,
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  checkAuth: () => dispatch(autoLogin()),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);

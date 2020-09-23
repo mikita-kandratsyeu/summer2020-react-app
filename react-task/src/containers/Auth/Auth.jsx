@@ -4,7 +4,7 @@ import PropType from 'prop-types';
 import { withRouter } from 'react-router-dom';
 
 import { connect } from 'react-redux';
-import { auth } from '../../store/actions/auth';
+import { auth } from '../../store/actions';
 
 import { Input } from '../../components/UI/Input';
 import { Button } from '../../components/UI/Button';
@@ -213,10 +213,8 @@ Auth.propTypes = {
   }).isRequired,
 };
 
-function mapDispatchToProps(dispatch) {
-  return {
-    authentication: (username, access) => dispatch(auth(username, access)),
-  };
-}
+const mapDispatchToProps = (dispatch) => ({
+  authentication: (username, access) => dispatch(auth(username, access)),
+});
 
 export default withRouter(connect(null, mapDispatchToProps)(Auth));

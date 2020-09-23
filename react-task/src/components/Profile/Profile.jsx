@@ -3,16 +3,21 @@ import PropTypes from 'prop-types';
 
 import { useHistory } from 'react-router-dom';
 
+import { connect } from 'react-redux';
+import { logout } from '../../store/actions';
+
 import styles from './Profile.module.scss';
 import { Button } from '../UI/Button';
 
-const Profile = ({ data: { username, update, access } }) => {
+const Profile = (props) => {
   const history = useHistory();
 
-  const clickHandler = () => {
-    update(false);
+  const { username, access } = props;
 
-    localStorage.clear();
+  const clickHandler = () => {
+    const { signOut } = props;
+
+    signOut();
 
     history.push('/');
   };
@@ -30,10 +35,18 @@ const Profile = ({ data: { username, update, access } }) => {
 };
 
 Profile.propTypes = {
-  data: PropTypes.exact({
-    username: PropTypes.string,
-    update: PropTypes.func,
-    access: PropTypes.string,
-  }).isRequired,
+  signOut: PropTypes.func.isRequired,
+  username: PropTypes.string.isRequired,
+  access: PropTypes.string.isRequired,
 };
-export default Profile;
+
+const mapStateToProps = (state) => ({
+  username: state.auth.username,
+  access: state.auth.access,
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  signOut: () => dispatch(logout()),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Profile);
