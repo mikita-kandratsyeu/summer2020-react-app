@@ -3,11 +3,14 @@ import PropType from 'prop-types';
 
 import { withRouter } from 'react-router-dom';
 
+import { connect } from 'react-redux';
+import { auth } from '../../store/actions/auth';
+
 import { Input } from '../../components/UI/Input';
 import { Button } from '../../components/UI/Button';
+import { Select } from '../../components/UI/Select';
 
 import styles from './Auth.module.scss';
-import { Select } from '../../components/UI/Select';
 
 class Auth extends Component {
   constructor(props) {
@@ -57,8 +60,7 @@ class Auth extends Component {
     const { formControls } = this.state;
     const control = formControls[name];
 
-    const isPrice = name === 'price';
-    const value = (!isPrice) ? e.target.value : +e.target.value;
+    const { value } = e.target;
 
     control.value = value;
     control.touched = true;
@@ -78,22 +80,14 @@ class Auth extends Component {
     });
   }
 
-  clickHandler = () => {
-    const { isFormValid, formControls: { username, access } } = this.state;
+  loginHandler = () => {
+    const { formControls: { username, access } } = this.state;
 
-    const { history } = this.props;
+    const { history, authentication } = this.props;
 
-    const { updateAuth } = this.props;
+    authentication(username.value, access.value);
 
     const { from } = { from: { pathname: '/' } };
-
-    localStorage.setItem('user', JSON.stringify({
-      token: isFormValid,
-      username: username.value,
-      access: access.value,
-    }));
-
-    updateAuth(isFormValid, username.value, access.value);
 
     history.replace(from);
 
@@ -204,7 +198,7 @@ class Auth extends Component {
           <Button
             disabled={!isFormValid}
             value="Login"
-            onClick={this.clickHandler}
+            onClick={this.loginHandler}
           />
         </fieldset>
       </form>
@@ -213,10 +207,16 @@ class Auth extends Component {
 }
 
 Auth.propTypes = {
-  updateAuth: PropType.func.isRequired,
+  authentication: PropType.func.isRequired,
   history: PropType.shape({
     replace: PropType.func.isRequired,
   }).isRequired,
 };
 
-export default withRouter(Auth);
+function mapDispatchToProps(dispatch) {
+  return {
+    authentication: (username, access) => dispatch(auth(username, access)),
+  };
+}
+
+export default withRouter(connect(null, mapDispatchToProps)(Auth));
