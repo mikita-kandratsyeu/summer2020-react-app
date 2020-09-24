@@ -9,18 +9,16 @@ import { logout } from '../../store/actions';
 import styles from './Profile.module.scss';
 import { Button } from '../UI/Button';
 
+const clickHandler = (signOut, history) => {
+  signOut();
+
+  history.push('/');
+};
+
 const Profile = (props) => {
   const history = useHistory();
 
-  const { username, access } = props;
-
-  const clickHandler = () => {
-    const { signOut } = props;
-
-    signOut();
-
-    history.push('/');
-  };
+  const { username, access, signOut } = props;
 
   return (
     <div className={styles.profile}>
@@ -29,7 +27,7 @@ const Profile = (props) => {
         {(access === 'Admin') ? <strong>add and remove</strong> : <strong>view</strong>}
         &nbsp;Apple electronics
       </p>
-      <Button value="Logout" onClick={clickHandler} disabled={false} />
+      <Button value="Logout" onClick={() => clickHandler(signOut, history)} disabled={false} />
     </div>
   );
 };

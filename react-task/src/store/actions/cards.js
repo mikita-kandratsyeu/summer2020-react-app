@@ -34,14 +34,7 @@ export const fetchCardsSuccess = (cards) => ({
 
 export const fetchCards = () => (dispatch) => {
   dispatch(fetchCardsStart());
-
-  const cards = JSON.parse(localStorage.getItem('cards'));
-
-  if (!cards) {
-    apiCall()
-      .then((res) => dispatch(fetchCardsSuccess(res)))
-      .catch((rej) => dispatch(fetchCardsError(rej)));
-  } else {
-    dispatch(fetchCardsSuccess(cards));
-  }
+  apiCall()
+    .then((res) => dispatch(fetchCardsSuccess(res)))
+    .catch((rej) => dispatch(fetchCardsError(rej)));
 };

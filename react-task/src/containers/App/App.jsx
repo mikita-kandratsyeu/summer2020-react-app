@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { useEffect } from 'react';
 import PropType from 'prop-types';
 
 import { Route, Switch, Redirect } from 'react-router-dom';
@@ -14,66 +14,50 @@ import { Error404 } from '../../components/Error404';
 
 import styles from './App.module.scss';
 
-class App extends Component {
-  componentDidMount() {
-    const { checkAuth } = this.props;
+const App = (props) => {
+  const { checkAuth, isAuth } = props;
 
+  useEffect(() => {
     checkAuth();
-  }
+  }, []);
 
-  componentDidUpdate(prevProps) {
-    const { cards } = this.props;
+  let routes = (
+    <Switch>
+      <Route path="/login" component={Auth} />
+      <Redirect from="/cards" to="/" />
+      <Redirect from="/profile" to="/" />
+      <Redirect exact from="/" to="/login" />
+      <Route path="*" component={Error404} />
+    </Switch>
+  );
 
-    if (prevProps.cards !== cards) {
-      localStorage.setItem('cards', JSON.stringify(this.props.cards));
-    }
-  }
-
-  render() {
-    const { isAuth } = this.props;
-
-    let routes = (
+  if (isAuth) {
+    routes = (
       <Switch>
-        <Route path="/login">
-          <Auth />
-        </Route>
-        <Redirect from="/cards" to="/" />
-        <Redirect from="/profile" to="/" />
-        <Redirect exact from="/" to="/login" />
+        <Route path="/cards" component={CardContainer} />
+        <Route path="/profile" component={Profile} />
+        <Redirect from="/login" to="/" />
+        <Redirect exact from="/" to="/cards" />
         <Route path="*" component={Error404} />
       </Switch>
     );
-
-    if (isAuth) {
-      routes = (
-        <Switch>
-          <Route path="/cards" component={CardContainer} />
-          <Route path="/profile" component={Profile} />
-          <Redirect from="/login" to="/" />
-          <Redirect exact from="/" to="/cards" />
-          <Route path="*" component={Error404} />
-        </Switch>
-      );
-    }
-
-    return (
-      <div className={styles.App}>
-        <Navigation isAuth={isAuth} />
-        {routes}
-      </div>
-    );
   }
-}
+
+  return (
+    <div className={styles.App}>
+      <Navigation isAuth={isAuth} />
+      {routes}
+    </div>
+  );
+};
 
 App.propTypes = {
   checkAuth: PropType.func.isRequired,
   isAuth: PropType.bool.isRequired,
-  cards: PropType.arrayOf(PropType.object).isRequired,
 };
 
 const mapStateToProps = (state) => ({
   isAuth: !!state.auth.token,
-  cards: state.cards.cards,
 });
 
 const mapDispatchToProps = (dispatch) => ({

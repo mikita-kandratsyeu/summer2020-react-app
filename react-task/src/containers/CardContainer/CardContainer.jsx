@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 
 import { connect } from 'react-redux';
@@ -10,43 +10,39 @@ import { CardCreationForm } from '../CardCreationForm';
 
 import styles from './CardContainer.module.scss';
 
-class CardContainer extends Component {
-  componentDidMount() {
-    const { fetchCardsFromApi } = this.props;
+const renderCards = (cards, access, loading, remove) => (
+  (loading)
+    ? <Loader />
+    : cards.map((items) => (
+      <Card
+        key={items.id}
+        data={items}
+        access={access}
+        clickHandler={() => remove(items.id)}
+      />
+    ))
+);
 
+const CardContainer = (props) => {
+  const {
+    fetchCardsFromApi, cards, access, loading, remove,
+  } = props;
+
+  useEffect(() => {
     fetchCardsFromApi();
-  }
+  }, []);
 
-  renderCards = (cards, access, loading, remove) => (
-    (loading)
-      ? <Loader />
-      : cards.map((items) => (
-        <Card
-          key={items.id}
-          data={items}
-          access={access}
-          clickHandler={() => remove(items.id)}
-        />
-      ))
+  return (
+    <div className={styles.cardContainer}>
+      {
+        (access === 'Admin')
+          ? <CardCreationForm />
+          : null
+      }
+      {renderCards(cards, access, loading, remove)}
+    </div>
   );
-
-  render() {
-    const {
-      cards, access, loading, remove,
-    } = this.props;
-
-    return (
-      <div className={styles.cardContainer}>
-        {
-          (access === 'Admin')
-            ? <CardCreationForm />
-            : null
-        }
-        {this.renderCards(cards, access, loading, remove)}
-      </div>
-    );
-  }
-}
+};
 
 CardContainer.propTypes = {
   cards: PropTypes.arrayOf(PropTypes.object).isRequired,
