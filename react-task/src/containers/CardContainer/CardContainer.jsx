@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
-import { apiCall } from '../../api/mockedApi';
+import { connect } from 'react-redux';
+import { fetchCards, updateState } from '../../store/actions';
+
 import { Card } from '../../components/Card';
 import { Loader } from '../../components/UI/Loader';
 import { CardCreationForm } from '../CardCreationForm';
@@ -9,89 +11,60 @@ import { CardCreationForm } from '../CardCreationForm';
 import styles from './CardContainer.module.scss';
 
 class CardContainer extends Component {
-  _isMounted = false;
-
-  constructor(props) {
-    super(props);
-    this.state = {
-      cards: [],
-    };
-  }
-
   componentDidMount() {
-    this._isMounted = true;
+    const { fetchCardsFromApi } = this.props;
 
-    const cards = JSON.parse(localStorage.getItem('cards'));
-
-    if (!cards) {
-      apiCall()
-        .then((response) => {
-          if (this._isMounted) {
-            this.setState({ cards: [...response] });
-          }
-        })
-        .catch((error) => console.log(error.message));
-    } else if (this._isMounted) {
-      this.setState({ cards: [...cards] });
-    }
+    fetchCardsFromApi();
   }
 
-  componentWillUnmount() {
-    this._isMounted = false;
-  }
-
-  updateData = (value) => {
-    const { cards } = this.state;
-
-    const data = { cards: [...cards, value] };
-
-    this.setState(data);
-
-    localStorage.setItem('cards', JSON.stringify(data.cards));
-  }
-
-  renderCards = (cards, access) => (
-    (!cards)
+  renderCards = (cards, access, loading, remove) => (
+    (loading)
       ? <Loader />
       : cards.map((items) => (
         <Card
           key={items.id}
           data={items}
           access={access}
-          clickHandler={() => this.removeData(items.id)}
+          clickHandler={() => remove(items.id)}
         />
       ))
   );
 
-  removeData = (idx) => {
-    const { cards } = this.state;
-
-    const updateState = cards.filter((item) => item.id !== idx);
-
-    this.setState({ cards: updateState });
-
-    localStorage.setItem('cards', JSON.stringify(updateState));
-  }
-
   render() {
-    const { cards } = this.state;
-    const { access } = this.props;
+    const {
+      cards, access, loading, remove,
+    } = this.props;
 
     return (
       <div className={styles.cardContainer}>
         {
           (access === 'Admin')
-            ? <CardCreationForm updateData={this.updateData} />
+            ? <CardCreationForm />
             : null
         }
-        {this.renderCards(cards, access)}
+        {this.renderCards(cards, access, loading, remove)}
       </div>
     );
   }
 }
 
 CardContainer.propTypes = {
+  cards: PropTypes.arrayOf(PropTypes.object).isRequired,
   access: PropTypes.string.isRequired,
+  loading: PropTypes.bool.isRequired,
+  fetchCardsFromApi: PropTypes.func.isRequired,
+  remove: PropTypes.func.isRequired,
 };
 
-export default CardContainer;
+const mapStateToProps = (state) => ({
+  access: state.auth.access,
+  loading: state.cards.loading,
+  cards: state.cards.cards,
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  fetchCardsFromApi: () => dispatch(fetchCards()),
+  remove: (idx) => dispatch(updateState(idx)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(CardContainer);

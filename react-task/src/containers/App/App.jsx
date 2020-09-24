@@ -21,6 +21,14 @@ class App extends Component {
     checkAuth();
   }
 
+  componentDidUpdate(prevProps) {
+    const { cards } = this.props;
+
+    if (prevProps.cards !== cards) {
+      localStorage.setItem('cards', JSON.stringify(this.props.cards));
+    }
+  }
+
   render() {
     const { isAuth } = this.props;
 
@@ -60,10 +68,12 @@ class App extends Component {
 App.propTypes = {
   checkAuth: PropType.func.isRequired,
   isAuth: PropType.bool.isRequired,
+  cards: PropType.arrayOf(PropType.object).isRequired,
 };
 
 const mapStateToProps = (state) => ({
   isAuth: !!state.auth.token,
+  cards: state.cards.cards,
 });
 
 const mapDispatchToProps = (dispatch) => ({
