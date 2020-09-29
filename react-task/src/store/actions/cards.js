@@ -1,34 +1,28 @@
-import {
-  CREATE_CARD,
-  DELETE_CARD,
-  FETCH_CARDS_START,
-  FETCH_CARDS_SUCCESS,
-  FETCH_CARDS_ERROR,
-} from './actionTypes';
+import { CardsActionTypes } from './actionTypes';
 
 import { apiCall } from '../../api/mockedApi';
 
 export const createCard = (card) => ({
-  type: CREATE_CARD,
+  type: CardsActionTypes.CREATE_CARD,
   payload: card,
 });
 
 export const updateState = (idx) => ({
-  type: DELETE_CARD,
+  type: CardsActionTypes.DELETE_CARD,
   payload: idx,
 });
 
 export const fetchCardsStart = () => ({
-  type: FETCH_CARDS_START,
+  type: CardsActionTypes.FETCH_CARDS_START,
 });
 
 export const fetchCardsError = (error) => ({
-  type: FETCH_CARDS_ERROR,
+  type: CardsActionTypes.FETCH_CARDS_ERROR,
   payload: error,
 });
 
 export const fetchCardsSuccess = (cards) => ({
-  type: FETCH_CARDS_SUCCESS,
+  type: CardsActionTypes.FETCH_CARDS_SUCCESS,
   payload: cards,
 });
 

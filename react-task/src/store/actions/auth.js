@@ -1,7 +1,7 @@
-import { AUTH_SUCCESS, AUTH_LOGOUT } from './actionTypes';
+import { AuthActionTypes } from './actionTypes';
 
 export const authSuccess = ({ token, username, access }) => ({
-  type: AUTH_SUCCESS,
+  type: AuthActionTypes.AUTH_SUCCESS,
   payload: {
     token,
     username,
@@ -13,7 +13,7 @@ export const logout = () => {
   localStorage.clear();
 
   return {
-    type: AUTH_LOGOUT,
+    type: AuthActionTypes.AUTH_LOGOUT,
   };
 };
 

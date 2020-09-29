@@ -1,10 +1,4 @@
-import {
-  CREATE_CARD,
-  DELETE_CARD,
-  FETCH_CARDS_START,
-  FETCH_CARDS_SUCCESS,
-  FETCH_CARDS_ERROR,
-} from '../actions/actionTypes';
+import { CardsActionTypes } from '../actions/actionTypes';
 
 const initialState = {
   cards: [],
@@ -14,28 +8,28 @@ const initialState = {
 
 const cardsReducer = (state = initialState, action) => {
   switch (action.type) {
-    case CREATE_CARD:
+    case CardsActionTypes.CREATE_CARD:
       return {
         ...state,
         cards: [...state.cards, action.payload],
       };
-    case DELETE_CARD:
+    case CardsActionTypes.DELETE_CARD:
       return {
         ...state,
         cards: state.cards.filter((card) => card.id !== action.payload),
       };
-    case FETCH_CARDS_START:
+    case CardsActionTypes.FETCH_CARDS_START:
       return {
         ...state,
         loading: true,
       };
-    case FETCH_CARDS_SUCCESS:
+    case CardsActionTypes.FETCH_CARDS_SUCCESS:
       return {
         ...state,
         loading: false,
         cards: [...action.payload],
       };
-    case FETCH_CARDS_ERROR:
+    case CardsActionTypes.FETCH_CARDS_ERROR:
       return {
         ...state,
         error: action.payload,
