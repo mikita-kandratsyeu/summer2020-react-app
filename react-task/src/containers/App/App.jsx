@@ -1,6 +1,10 @@
-import React, { Component } from 'react';
+import React, { useEffect } from 'react';
+import PropType from 'prop-types';
 
 import { Route, Switch, Redirect } from 'react-router-dom';
+
+import { connect } from 'react-redux';
+import { autoLogin } from '../../store/actions';
 
 import { Navigation } from '../../components/Navigation';
 import { Auth } from '../Auth';
@@ -10,66 +14,54 @@ import { Error404 } from '../../components/Error404';
 
 import styles from './App.module.scss';
 
-class App extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      username: '',
-      isAuth: false,
-      access: 'User',
-    };
-  }
+const App = (props) => {
+  const { checkAuth, isAuth } = props;
 
-  componentDidMount() {
-    const user = JSON.parse(localStorage.getItem('user'));
+  useEffect(() => {
+    checkAuth();
+  }, []);
 
-    if (user && user.token) {
-      this.setState({ username: user.username, isAuth: user.token, access: user.access });
-    }
-  }
+  let routes = (
+    <Switch>
+      <Route path="/login" component={Auth} />
+      <Redirect from="/cards" to="/" />
+      <Redirect from="/profile" to="/" />
+      <Redirect exact from="/" to="/login" />
+      <Route path="*" component={Error404} />
+    </Switch>
+  );
 
-  updateAuth = (isAuth, username = '', access = false) => {
-    this.setState({ isAuth, username, access });
-  }
-
-  render() {
-    const { isAuth, username, access } = this.state;
-
-    let routes = (
+  if (isAuth) {
+    routes = (
       <Switch>
-        <Route path="/login">
-          <Auth updateAuth={this.updateAuth} />
-        </Route>
-        <Redirect from="/cards" to="/" />
-        <Redirect from="/profile" to="/" />
-        <Redirect exact from="/" to="/login" />
+        <Route path="/cards" component={CardContainer} />
+        <Route path="/profile" component={Profile} />
+        <Redirect from="/login" to="/" />
+        <Redirect exact from="/" to="/cards" />
         <Route path="*" component={Error404} />
       </Switch>
     );
-
-    if (isAuth) {
-      routes = (
-        <Switch>
-          <Route path="/cards">
-            <CardContainer access={access} />
-          </Route>
-          <Route path="/profile">
-            <Profile data={{ username, update: this.updateAuth, access }} />
-          </Route>
-          <Redirect from="/login" to="/" />
-          <Redirect exact from="/" to="/cards" />
-          <Route path="*" component={Error404} />
-        </Switch>
-      );
-    }
-
-    return (
-      <div className={styles.App}>
-        <Navigation isAuth={isAuth} />
-        {routes}
-      </div>
-    );
   }
-}
 
-export default App;
+  return (
+    <div className={styles.App}>
+      <Navigation isAuth={isAuth} />
+      {routes}
+    </div>
+  );
+};
+
+App.propTypes = {
+  checkAuth: PropType.func.isRequired,
+  isAuth: PropType.bool.isRequired,
+};
+
+const mapStateToProps = (state) => ({
+  isAuth: !!state.auth.token,
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  checkAuth: () => dispatch(autoLogin()),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);

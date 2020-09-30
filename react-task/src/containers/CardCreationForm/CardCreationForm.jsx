@@ -4,6 +4,9 @@ import PropType from 'prop-types';
 import { v4 as unique } from 'uuid';
 import is from 'is_js';
 
+import { connect } from 'react-redux';
+import { createCard } from '../../store/actions';
+
 import { Input } from '../../components/UI/Input';
 import { TextArea } from '../../components/UI/TextArea';
 import { Button } from '../../components/UI/Button';
@@ -107,7 +110,7 @@ class CardCreationForm extends Component {
   }
 
   clickHandler = () => {
-    const { updateData } = this.props;
+    const { addCardIntoState } = this.props;
 
     const uuid = unique();
     this.setState({ id: uuid });
@@ -119,7 +122,7 @@ class CardCreationForm extends Component {
       },
     } = this.state;
 
-    updateData({
+    addCardIntoState({
       id,
       title: title.value,
       description: description.value,
@@ -271,7 +274,11 @@ class CardCreationForm extends Component {
 }
 
 CardCreationForm.propTypes = {
-  updateData: PropType.func.isRequired,
+  addCardIntoState: PropType.func.isRequired,
 };
 
-export default CardCreationForm;
+const mapDispatchToProps = (dispatch) => ({
+  addCardIntoState: (card) => dispatch(createCard(card)),
+});
+
+export default connect(null, mapDispatchToProps)(CardCreationForm);
