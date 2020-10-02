@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useLayoutEffect } from 'react';
 import PropTypes from 'prop-types';
 
 import { connect } from 'react-redux';
@@ -28,7 +28,7 @@ const CardContainer = (props) => {
     fetchCardsFromApi, cards, access, loading, remove,
   } = props;
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     fetchCardsFromApi();
   }, []);
 
