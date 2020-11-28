@@ -1,11 +1,8 @@
 import React, { useEffect } from 'react';
-import PropType from 'prop-types';
-
 import { Route, Switch, Redirect } from 'react-router-dom';
-
-import { connect } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { authTokenSelector } from '../../store/selectors';
 import { autoLogin } from '../../store/actions';
-
 import { Navigation } from '../../components/Navigation';
 import { Auth } from '../Auth';
 import { CardContainer } from '../CardContainer';
@@ -14,11 +11,13 @@ import { Error404 } from '../../components/Error404';
 
 import styles from './App.module.scss';
 
-const App = (props) => {
-  const { checkAuth, isAuth } = props;
+const App = () => {
+  const isAuth = useSelector(authTokenSelector);
+
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    checkAuth();
+    dispatch(autoLogin());
   }, []);
 
   let routes = (
@@ -51,17 +50,4 @@ const App = (props) => {
   );
 };
 
-App.propTypes = {
-  checkAuth: PropType.func.isRequired,
-  isAuth: PropType.bool.isRequired,
-};
-
-const mapStateToProps = (state) => ({
-  isAuth: !!state.auth.token,
-});
-
-const mapDispatchToProps = (dispatch) => ({
-  checkAuth: () => dispatch(autoLogin()),
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(App);
+export default App;

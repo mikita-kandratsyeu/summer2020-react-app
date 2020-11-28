@@ -23,7 +23,9 @@ const authReducer = (state = initialState, action) => {
         access: 'User',
       };
     default:
-      return state;
+      return {
+        ...state,
+      };
   }
 };
 
